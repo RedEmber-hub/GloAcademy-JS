@@ -32,25 +32,25 @@ function getServicePercentPrices() {
 
 const servicePercentPrice = getServicePercentPrices();
 
-function getRollbackMessage() {
-  if (fullPrice >= 30000) {
+function getRollbackMessage(price) {
+  if (price >= 30000) {
     return 'Даем скидку в 10%';
-  } else if (fullPrice >= 15000 && fullPrice < 30000) {
+  } else if (price >= 15000 && price < 30000) {
     return 'Даем скидку в 5%';
-  } else if (fullPrice < 15000 && fullPrice >= 0) {
+  } else if (price < 15000 && price >= 0) {
     return 'Скидка не предусмотрена';
   } else {
     return 'Что то пошло не так';
   }
 }
 
-function showTypeOf(value) {
-  return typeof value;
-}
+const showTypeOf = function (variable) {
+  return `${variable}: ${typeof variable}`;
+};
 
 console.log(showTypeOf(title));
 console.log(showTypeOf(fullPrice));
 console.log(showTypeOf(adaptive));
 console.log(screens);
-console.log(getRollbackMessage());
+console.log(getRollbackMessage(fullPrice));
 console.log(getServicePercentPrices());
