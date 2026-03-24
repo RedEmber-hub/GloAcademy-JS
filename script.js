@@ -1,86 +1,83 @@
-let title;
-let screens;
-let screenPrice;
-let adaptive;
-let rollback = 9;
-let allServicePrices;
-let servicePercentPrice;
-let fullPrice;
-let service1;
-let service2;
-let rollbackAmount;
+const appData = {
+  title: '',
+  screens: '',
+  screenPrice: 0,
+  adaptive: true,
+  rollback: 9,
+  allServicePrices: 0,
+  servicePercentPrice: 0,
+  fullPrice: 0,
+  service1: '',
+  service2: '',
+  rollbackAmount: 0,
+  start: function () {
+    appData.asking();
+    appData.allServicePrices = appData.getAllServicePrices();
+    appData.fullPrice = appData.getFullPrice();
+    appData.rollbackAmount = appData.fullPrice * (appData.rollback / 100);
+    appData.servicePercentPrice = appData.getServicePercentPrices();
+    appData.title = appData.getTitle();
 
-const isNumber = function (num) {
-  return !isNaN(parseFloat(num)) && isFinite(num);
-};
-
-const asking = function () {
-  title = prompt('Как называется ваш проект?', 'Человек паук новый день');
-  screens = prompt('Какие типы экранов нужно разработать?', 'Простые, сложные');
-
-  do {
-    screenPrice = +prompt('Сколько будет стоить данная работа?');
-  } while (!isNumber(screenPrice));
-
-  adaptive = confirm('Нужен ли адаптив на сайте?');
-};
-
-const getAllServicePrices = function () {
-  let sum = 0;
-
-  for (let i = 0; i < 2; i++) {
-    if (i === 0) {
-      service1 = prompt('Какой дополнительный тип услуги нужен?(первый вариант)');
-    } else if (i === 1) {
-      service2 = prompt('Какой дополнительный тип услуги нужен?(второй вариант)');
-    }
+    appData.logger();
+  },
+  isNumber: function (num) {
+    return !isNaN(parseFloat(num)) && isFinite(num);
+  },
+  asking: function () {
+    appData.title = prompt('Как называется ваш проект?', 'Человек паук новый день');
+    appData.screens = prompt('Какие типы экранов нужно разработать?', 'Простые, сложные');
 
     do {
-      sum += +prompt('Сколько это будет стоить?');
-    } while (!isNumber(sum));
-  }
+      appData.screenPrice = +prompt('Сколько будет стоить данная работа?');
+    } while (!appData.isNumber(appData.screenPrice));
 
-  return sum;
-};
+    appData.adaptive = confirm('Нужен ли адаптив на сайте?');
+  },
+  getAllServicePrices: function () {
+    let sum = 0;
 
-function getFullPrice() {
-  return screenPrice + allServicePrices;
-}
+    for (let i = 0; i < 2; i++) {
+      if (i === 0) {
+        appData.service1 = prompt('Какой дополнительный тип услуги нужен?(первый вариант)');
+      } else if (i === 1) {
+        appData.service2 = prompt('Какой дополнительный тип услуги нужен?(второй вариант)');
+      }
 
-function getTitle() {
-  return title[0].toUpperCase() + title.slice(1).toLowerCase();
-}
+      do {
+        sum += +prompt('Сколько это будет стоить?');
+      } while (!appData.isNumber(sum));
+    }
 
-function getServicePercentPrices() {
-  return fullPrice - rollbackAmount;
-}
+    return sum;
+  },
+  getFullPrice: function () {
+    return appData.screenPrice + appData.allServicePrices;
+  },
+  getTitle: function () {
+    return appData.title[0].toUpperCase() + appData.title.slice(1).toLowerCase();
+  },
+  getServicePercentPrices: function () {
+    return appData.fullPrice - appData.rollbackAmount;
+  },
+  getRollbackMessage: function (price) {
+    if (price >= 30000) return 'Даем скидку в 10%';
+    if (price >= 15000 && price < 30000) return 'Даем скидку в 5%';
+    if (price < 15000 && price >= 0) return 'Скидка не предусмотрена';
 
-function getRollbackMessage(price) {
-  if (price >= 30000) {
-    return 'Даем скидку в 10%';
-  } else if (price >= 15000 && price < 30000) {
-    return 'Даем скидку в 5%';
-  } else if (price < 15000 && price >= 0) {
-    return 'Скидка не предусмотрена';
-  } else {
     return 'Что то пошло не так';
-  }
-}
-
-const showTypeOf = function (variable) {
-  return `${variable}: ${typeof variable}`;
+  },
+  logger: function () {
+    console.log(appData.title);
+    console.log(`Экраны: ${appData.screens}`);
+    console.log(`Стоимость проекта: ${appData.screenPrice} рублей`);
+    console.log(`Адаптив: ${appData.adaptive}`);
+    console.log(`Процент отката(%): ${appData.rollback}%`);
+    console.log(`Процент отката: ${appData.rollbackAmount} рублей`);
+    console.log(`Сумма доп. услуг ${appData.allServicePrices} рублей`);
+    console.log(`Стоимость проекта с доп. услугами без скидки ${appData.fullPrice} рублей`);
+    console.log(
+      `Стоимость проекта с доп. услугами с ${appData.rollback}% скидкой: ${appData.servicePercentPrice} рублей`
+    );
+  },
 };
-
-asking();
-allServicePrices = getAllServicePrices();
-fullPrice = getFullPrice();
-rollbackAmount = fullPrice * (rollback / 100);
-servicePercentPrice = getServicePercentPrices();
-title = getTitle();
-
-console.log(showTypeOf(title));
-console.log(showTypeOf(fullPrice));
-console.log(showTypeOf(adaptive));
-console.log(screens);
-console.log(getRollbackMessage(fullPrice));
-console.log(getServicePercentPrices());
+appData.start();
