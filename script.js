@@ -20,13 +20,16 @@ const appData = {
 
     appData.logger();
   },
+  isNumber: function (num) {
+    return !isNaN(parseFloat(num)) && isFinite(num);
+  },
   asking: function () {
     appData.title = prompt('Как называется ваш проект?', 'Человек паук новый день');
     appData.screens = prompt('Какие типы экранов нужно разработать?', 'Простые, сложные');
 
     do {
       appData.screenPrice = +prompt('Сколько будет стоить данная работа?');
-    } while (!isNumber(appData.screenPrice));
+    } while (!appData.isNumber(appData.screenPrice));
 
     appData.adaptive = confirm('Нужен ли адаптив на сайте?');
   },
@@ -42,7 +45,7 @@ const appData = {
 
       do {
         sum += +prompt('Сколько это будет стоить?');
-      } while (!isNumber(sum));
+      } while (!appData.isNumber(sum));
     }
 
     return sum;
@@ -56,7 +59,7 @@ const appData = {
   getServicePercentPrices: function () {
     return appData.fullPrice - appData.rollbackAmount;
   },
-  getRollbackMessage(price) {
+  getRollbackMessage: function (price) {
     if (price >= 30000) return 'Даем скидку в 10%';
     if (price >= 15000 && price < 30000) return 'Даем скидку в 5%';
     if (price < 15000 && price >= 0) return 'Скидка не предусмотрена';
@@ -77,9 +80,4 @@ const appData = {
     );
   },
 };
-
-const isNumber = function (num) {
-  return !isNaN(parseFloat(num)) && isFinite(num);
-};
-
 appData.start();
